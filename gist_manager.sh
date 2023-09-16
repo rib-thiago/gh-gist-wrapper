@@ -58,13 +58,20 @@ LIST='gh gist list'
 RENAME='gh gist rename'
 VIEW='gh gist view'
 
-count_columns_with_awk() {
+# count_columns_with_awk() {
+#     local output="$1"
+#     local number_of_columns=$(echo "$output" | awk 'NR==1 {print NF}')
+#     echo "Número de colunas: $number_of_columns"
+# }
+
+get_first_field_with_awk() {
     local output="$1"
-    local number_of_columns=$(echo "$output" | awk 'NR==1 {print NF}')
-    echo "Número de colunas: $number_of_columns"
+    local first_field=$(echo "$output" | awk 'NR==1 {print $1}')
+    echo "$first_field"
 }
-
-
 output=$($LIST --secret)
-count_columns_with_awk "$output"
+# count_columns_with_awk "$output"
+get_first_field_with_awk "$output"
+
+
 
