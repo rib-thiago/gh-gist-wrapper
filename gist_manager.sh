@@ -33,7 +33,9 @@
 
 
 #
-# TODO: None.
+# TODO: Implementar as opções dos comandos do gh gist
+# TODO: Refatorar o código em busca de padronização
+# TODO: Criar Mensagens de Ajuda, Versão, etc..
 
 #
 # FIXME: Comando `gh gist rename` não disponível.
@@ -224,8 +226,6 @@ edit_gist() {
         echo "Gist não encontrado."
     fi
 }
-
-
 
 # Inicio
 
