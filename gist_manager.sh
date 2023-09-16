@@ -202,6 +202,30 @@ view_gist() {
     fi
 }
 
+# Função para editar um Gist
+edit_gist() {
+    create_dictionary 
+    echo "Escolha um Gist para editar:"
+    
+    # Criar uma lista de opções formatadas como uma tabela
+    options_list=""
+    for name in "${!gist_map[@]}"; do
+        options_list+="$(printf "%-30s" "$name") : ${gist_map[$name]}\n"
+    done
+    
+    # Exibir a lista formatada usando 'column'
+    echo -e "$options_list" | column -t -s ':'
+    read -p "Digite o nome do Gist que deseja editar: " gist_name
+    gist_id="${gist_map[$gist_name]}"
+    if [ -n "$gist_id" ]; then
+        $EDIT "$gist_id"  # Usar o comando 'gh gist edit' para editar o Gist
+        echo "Gist editado com sucesso."
+    else
+        echo "Gist não encontrado."
+    fi
+}
+
+
 
 # Inicio
 
@@ -231,7 +255,7 @@ while true; do
             view_gist
             ;;
         5)
-            # Implementar edição de Gist
+            edit_gist
             ;;
         6)
             delete_gist
