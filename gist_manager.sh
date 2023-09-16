@@ -64,8 +64,7 @@ declare -A gist_map
 
 # Função para listar os Gists
 list_gists() {
-    local output="$($LIST)"
-    create_dictionary "$output"  # Chama a função para criar o dicionário
+    create_dictionary 
     echo -e "${MAGENTA}Gists Catalogados: ${RESET}"
     echo -e ""
     
@@ -77,7 +76,7 @@ list_gists() {
 
 # Função para criar um dicionário de Gists a partir da saída do comando
 create_dictionary() {
-    local output="$1"
+    local output="$($LIST)"
     lines=()
 
     # Limpar o gist_map para evitar IDs antigos
@@ -158,6 +157,7 @@ clone_gist() {
 
 # Função para excluir um Gist
 delete_gist() {
+    create_dictionary 
     echo "Escolha um Gist para excluir:"
     
     # Criar uma lista de opções formatadas como uma tabela
@@ -175,6 +175,28 @@ delete_gist() {
         echo "Gist excluído com sucesso."
         # Remova o Gist do mapa
         unset "gist_map[$gist_name]"
+    else
+        echo "Gist não encontrado."
+    fi
+}
+
+# Função para visualizar um Gist
+view_gist() {
+    create_dictionary 
+    echo "Escolha um Gist para visualizar:"
+    
+    # Criar uma lista de opções formatadas como uma tabela
+    options_list=""
+    for name in "${!gist_map[@]}"; do
+        options_list+="$(printf "%-30s" "$name") : ${gist_map[$name]}\n"
+    done
+    
+    # Exibir a lista formatada usando 'column'
+    echo -e "$options_list" | column -t -s ':'
+    read -p "Digite o nome do Gist que deseja visualizar: " gist_name
+    gist_id="${gist_map[$gist_name]}"
+    if [ -n "$gist_id" ]; then
+        $VIEW "$gist_id"  # Usar o comando 'gh gist view' para visualizar o Gist
     else
         echo "Gist não encontrado."
     fi
@@ -206,7 +228,7 @@ while true; do
             clone_gist
             ;;
         4)
-            # Implementar visualização de Gist
+            view_gist
             ;;
         5)
             # Implementar edição de Gist
