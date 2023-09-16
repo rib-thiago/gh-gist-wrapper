@@ -97,7 +97,6 @@ create_dictionary() {
     done <<< "$output"
 }
 
-
 # Função para criar um novo Gist
 create_gist() {
     echo "Como você deseja criar o Gist?"
@@ -135,9 +134,6 @@ create_gist() {
 
 }
 
-
-
-
 # Função para clonar um Gist
 clone_gist() {
     echo "Escolha um Gist para clonar:"
@@ -160,6 +156,29 @@ clone_gist() {
     fi
 }
 
+# Função para excluir um Gist
+delete_gist() {
+    echo "Escolha um Gist para excluir:"
+    
+    # Criar uma lista de opções formatadas como uma tabela
+    options_list=""
+    for name in "${!gist_map[@]}"; do
+        options_list+="$(printf "%-30s" "$name") : ${gist_map[$name]}\n"
+    done
+    
+    # Exibir a lista formatada usando 'column'
+    echo -e "$options_list" | column -t -s ':'
+    read -p "Digite o nome do Gist que deseja excluir: " gist_name
+    gist_id="${gist_map[$gist_name]}"
+    if [ -n "$gist_id" ]; then
+        $DELETE "$gist_id"
+        echo "Gist excluído com sucesso."
+        # Remova o Gist do mapa
+        unset "gist_map[$gist_name]"
+    else
+        echo "Gist não encontrado."
+    fi
+}
 
 
 # Inicio
@@ -193,7 +212,7 @@ while true; do
             # Implementar edição de Gist
             ;;
         6)
-            # Implementar exclusão de Gist
+            delete_gist
             ;;
         7)
             echo "Saindo..."
