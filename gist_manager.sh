@@ -58,3 +58,13 @@ LIST='gh gist list'
 RENAME='gh gist rename'
 VIEW='gh gist view'
 
+count_columns_with_awk() {
+    local output="$1"
+    local number_of_columns=$(echo "$output" | awk 'NR==1 {print NF}')
+    echo "Número de colunas: $number_of_columns"
+}
+
+
+output=$($LIST --secret)
+count_columns_with_awk "$output"
+
